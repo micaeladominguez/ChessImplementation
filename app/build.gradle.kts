@@ -1,4 +1,4 @@
-plugins {
+ plugins {
     java
     application
     kotlin("jvm") version "1.7.10"
@@ -9,14 +9,15 @@ plugins {
 group = "edu.austral.dissis.chess"
 version = "1.0.0"
 
+
 repositories {
 //    mavenLocal()
     mavenCentral()
     maven {
         url = uri("https://maven.pkg.github.com/austral-ingsis/chess-ui")
         credentials {
-            username = System.getenv("GITHUB_USER")
-            password = System.getenv("GITHUB_TOKEN")
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USER")
+            password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
         }
     }
 }
