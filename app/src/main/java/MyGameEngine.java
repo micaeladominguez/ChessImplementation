@@ -1,4 +1,5 @@
 import Game.Game;
+import Piece.Colors;
 import edu.austral.dissis.chess.gui.*;
 import org.jetbrains.annotations.NotNull;
 import Game.GameResponse;
@@ -21,8 +22,9 @@ public class MyGameEngine implements GameEngine {
        }
        else if(gameResponse.getTypeOfResponse() == TypeOfResponse.INCORRECT_MOVE)
            return new InvalidMove(gameResponse.getMessage());
-       else
+       else{
            return new GameOver(adapter.parseColor(game.getReference()));
+       }
     }
 
     @NotNull

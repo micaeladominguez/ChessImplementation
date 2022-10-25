@@ -20,11 +20,8 @@ public class MovementValidator {
     }
 
     public boolean isMovePossible(Board board, Position positionTo, Position positionFrom, List<Rule> rules){
-        System.out.println(rules);
         for(Rule rule: rules){
-            System.out.println(rule);
             RuleResponse response = rule.isMovePossible(board, positionTo, positionFrom);
-            System.out.println("response " + response.isResponse());
             if(response.isResponse() && response.getMoveType() != MoveType.SKIP && response.getMoveType() != MoveType.HORSE){
                  boolean crashPiece = noPieceCrash.isMovePossible(board, positionTo, positionFrom, response.getMoveType());
                  return crashPiece && sameColorRule(positionTo, positionFrom);
@@ -35,6 +32,20 @@ public class MovementValidator {
         return false;
     }
 
+    public boolean isOnCheckRule(Board board, Colors reference, RulesPerPiece rules){
+        Colors color = Colors.BLACK;
+        if(reference == Colors.BLACK){
+            color = Colors.WHITE;
+        }
+        //TERMINE DE MOVER YO y me fijo si deje en hacke a la otra persona
+        //AGARRO LA POSICION DE EL KING DE LA OTRA PERSONA
+        Position kingPosition = board.getKingPosition(color);
+        ArrayList<Position> possibleMovementsForKing = rules.getPossibleMovementsForKing(board,kingPosition);
+        //AGARRO MIS PIEZAS
+        ArrayList<Position> positionsFromPieces = board.searchForPiece(reference);
+        //ME FIJO SI ESTA EN HACKE LA OTRA PERSONA
+        return isOnCheckRule.checkAllMovements(positionsFromPieces, possibleMovementsForKing, rules, board);
+    }
     public boolean imOnCheckRule(Board board, Colors reference, RulesPerPiece rules){
         Colors color = Colors.BLACK;
         if(reference == Colors.BLACK){
@@ -43,7 +54,7 @@ public class MovementValidator {
         Position kingPosition = board.getKingPosition(reference);
         ArrayList<Position> possibleMovementsForKing = rules.getPossibleMovementsForKing(board,kingPosition);
         ArrayList<Position> positionsFromPieces = board.searchForPiece(color);
-        return isOnCheckRule.checkMovements(positionsFromPieces, possibleMovementsForKing, rules, board);
+        return isOnCheckRule.checkAllMovements(positionsFromPieces, possibleMovementsForKing, rules, board);
     }
     public boolean sameColorRule(Position positionTo, Position positionFrom){
         if(positionFrom.getPiece().isPresent() && positionFrom.getPiece().get().getName() == Pieces.KING
@@ -54,4 +65,14 @@ public class MovementValidator {
         return positionTo.getPiece().isEmpty() || positionTo.getPiece().get().getColor() != positionFrom.getPiece().get().getColor();
     }
 
+    public boolean imOnCheckRuleAtLeastOne(Board board, Colors reference, RulesPerPiece rules) {
+        Colors color = Colors.BLACK;
+        if(reference == Colors.BLACK){
+            color = Colors.WHITE;
+        }
+        Position kingPosition = board.getKingPosition(reference);
+        ArrayList<Position> possibleMovementsForKing = rules.getPossibleMovementsForKing(board,kingPosition);
+        ArrayList<Position> positionsFromPieces = board.searchForPiece(color);
+        return isOnCheckRule.checkAnyMovement(positionsFromPieces, possibleMovementsForKing, rules, board);
+    }
 }

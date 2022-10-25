@@ -1,6 +1,7 @@
 package Board;
 
 
+import Game.LastMovement;
 import Generators.LinkBoardPieceGenerators;
 import Piece.Colors;
 import Piece.Piece;
@@ -28,7 +29,7 @@ public class Board {
     private void generateBoard(Tuple maxEdges) {
         this.board = LinkBoardPieceGenerators.linkBoardPieceGenerator();
         this.whiteKingPointer = new Tuple(0,4);
-        this.blackKingPointer = new Tuple(7, 3);
+        this.blackKingPointer = new Tuple(7, 4);
     }
 
     public Position[][] getBoard(){
@@ -75,8 +76,8 @@ public class Board {
         if(piece.getName() == Pieces.KING && positionFrom.getRow() == position.getRow()
                 && Math.abs(positionFrom.getColumn() - position.getColumn()) > 0){
                     doCastlingRotation(positionFrom, position, piece);
-        }else if(piece.getName() == Pieces.PAWN && position.getRow() == 0 ||
-                position.getRow() + 1 == maxEdges.row){
+        }else if(piece.getName() == Pieces.PAWN && (position.getRow() == 0 ||
+                position.getRow() + 1 == maxEdges.row)){
             piece.changeType(Pieces.QUEEN);
             movePiece(position, piece);
         } else{
@@ -95,7 +96,7 @@ public class Board {
     }
 
     private void movePiece(Position position, Piece piece){
-        if(position.isEmpty()){
+        if(position != null && position.isEmpty()){
             piece.addMove();
             position.insertPiece(piece);
         }else{
@@ -149,5 +150,10 @@ public class Board {
                 }
             }
         }
+    }
+
+    public void rollBackLastMovement(Position positionTo, LastMovement lastMovement) {
+        movePieceFromPosition(positionTo);
+        movePieceToPosition(lastMovement.getPosition(), lastMovement.getPiece(), positionTo);
     }
 }

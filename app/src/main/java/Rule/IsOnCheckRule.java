@@ -11,7 +11,15 @@ import java.util.List;
 
 public class IsOnCheckRule {
     NoPieceCrash noPieceCrash = new NoPieceCrash();
-    public boolean checkMovements(ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board) {
+    public boolean checkAllMovements(ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board) {
+        boolean[] forAllMoves = getAllHacks(positionsFromPieces, possibleMovementsForKing, rules, board);
+        for (boolean forAllMove : forAllMoves) {
+            if (!forAllMove) return false;
+        }
+        return true;
+    }
+
+    public boolean[] getAllHacks(ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board){
         boolean[] forAllMoves = new boolean[possibleMovementsForKing.size()] ;
         for (int i = 0; i < possibleMovementsForKing.size(); i++) {
             for (Position positionsFromPiece : positionsFromPieces) {
@@ -23,12 +31,15 @@ public class IsOnCheckRule {
                 }
             }
         }
-        for (boolean forAllMove : forAllMoves) {
-            if (!forAllMove) return false;
-        }
-        return true;
+        return forAllMoves;
     }
-
+    public boolean checkAnyMovement(ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board){
+        boolean[] forAllMoves = getAllHacks(positionsFromPieces, possibleMovementsForKing, rules, board);
+        for (boolean forAllMove : forAllMoves) {
+            if (forAllMove) return true;
+        }
+        return false;
+    }
     public boolean isMovePossibleWithoutCrash(Board board, Position positionTo, Position positionFrom, List<Rule> rules){
         for(Rule rule: rules){
             RuleResponse response = rule.isMovePossible(board, positionTo, positionFrom);

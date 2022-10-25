@@ -34,9 +34,9 @@ public class LinkBoardPieceGenerators {
                     }else if(j == 2 || j == board[0].length - 3){
                         board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.BLACK, Pieces.BISHOP) );
                     }else if(j == 3){
-                        board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.BLACK, Pieces.KING) );
-                    }else{
                         board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.BLACK, Pieces.QUEEN) );
+                    }else{
+                        board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.BLACK, Pieces.KING) );
                     }
                 }
             }
