@@ -45,7 +45,6 @@ public class Game {
         Position positionTo = board.getBoard()[rowTo][columnTo];
         if(!checkPiece(positionFrom)) return new GameResponse("No piece selected", TypeOfResponse.INCORRECT_MOVE);
         if(!checkTurn(positionFrom))  return new GameResponse("It's not your turn", TypeOfResponse.INCORRECT_MOVE);
-        System.out.println("I'm on check " + movementValidator.imOnCheckRuleAtLeastOne(board,reference,rulesPerPiece));
         if(movementValidator.imOnCheckRuleAtLeastOne(board, reference, rulesPerPiece) &&
                 positionFrom.getPiece().isPresent() &&
                 positionFrom.getPiece().get().getName() != Pieces.KING

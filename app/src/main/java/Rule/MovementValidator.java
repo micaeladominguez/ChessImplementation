@@ -71,7 +71,8 @@ public class MovementValidator {
             color = Colors.WHITE;
         }
         Position kingPosition = board.getKingPosition(reference);
-        ArrayList<Position> possibleMovementsForKing = rules.getPossibleMovementsForKing(board,kingPosition);
+        ArrayList<Position> possibleMovementsForKing = new ArrayList<>();
+        possibleMovementsForKing.add(kingPosition);
         ArrayList<Position> positionsFromPieces = board.searchForPiece(color);
         return isOnCheckRule.checkAnyMovement(positionsFromPieces, possibleMovementsForKing, rules, board);
     }
