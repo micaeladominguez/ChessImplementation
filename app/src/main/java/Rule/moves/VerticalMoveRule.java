@@ -20,7 +20,9 @@ public class VerticalMoveRule implements Rule {
         if (limit != -1) {
             int difference = Math.abs(positionTo.getRow() - positionFrom.getRow());
             int useLimit = 0;
-            if (positionFrom.getPiece().get().getName() == Pieces.PAWN && positionFrom.getPiece().get().moves() == 0) {
+            if ((positionFrom.getPiece().get().getName() == Pieces.PAWN ||
+                    positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN)
+            && positionFrom.getPiece().get().moves() == 0) {
                 useLimit = 2;
                 this.limit = 1;
             } else {

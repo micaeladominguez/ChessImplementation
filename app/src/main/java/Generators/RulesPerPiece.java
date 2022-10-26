@@ -19,7 +19,8 @@ public class RulesPerPiece {
         //RULES PER PAWN
         ArrayList<Rule> rulesForPawn = new ArrayList<>();
         rulesForPawn.add( new VerticalMoveRule(1));
-        rulesForPawn.add(new DiagonalMoveRule(1));rulesPerPiece.put(Pieces.PAWN, rulesForPawn);
+        rulesForPawn.add(new DiagonalMoveRule(1));
+        rulesPerPiece.put(Pieces.PAWN, rulesForPawn);
         //RULES PER HORSE
         ArrayList<Rule> rulesForHorse = new ArrayList<>();
         rulesForHorse.add(new HorseMove());

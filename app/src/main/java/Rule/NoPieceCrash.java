@@ -56,7 +56,8 @@ public class NoPieceCrash {
                 if(!board.getBoard()[i][column].isEmpty()) return false;
             }
         }
-        if(positionFrom.getPiece().isPresent() & positionFrom.getPiece().get().getName() == Pieces.PAWN){
+        if(positionFrom.getPiece().isPresent() & positionFrom.getPiece().get().getName() == Pieces.PAWN ||
+                positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN){
             if(!positionTo.isEmpty()){
                 return false;
             }
