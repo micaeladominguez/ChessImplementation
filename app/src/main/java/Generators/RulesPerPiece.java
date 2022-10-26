@@ -5,12 +5,11 @@ import Piece.Piece;
 import Piece.Pieces;
 import Position.Position;
 import Rule.Rule;
-import Rule.moves.VerticalMoveRule;
-import Rule.moves.DiagonalMoveRule;
+import Rule.moves.*;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
-import Rule.moves.HorseMove;
-import Rule.moves.HorizontalRuleMove;
+
 import Rule.CastlingRule;
 public class RulesPerPiece {
     protected EnumMap<Pieces, ArrayList<Rule>> rulesPerPiece;
@@ -20,8 +19,7 @@ public class RulesPerPiece {
         //RULES PER PAWN
         ArrayList<Rule> rulesForPawn = new ArrayList<>();
         rulesForPawn.add( new VerticalMoveRule(1));
-        rulesForPawn.add(new DiagonalMoveRule(1));
-        rulesPerPiece.put(Pieces.PAWN, rulesForPawn);
+        rulesForPawn.add(new DiagonalMoveRule(1));rulesPerPiece.put(Pieces.PAWN, rulesForPawn);
         //RULES PER HORSE
         ArrayList<Rule> rulesForHorse = new ArrayList<>();
         rulesForHorse.add(new HorseMove());
@@ -48,7 +46,18 @@ public class RulesPerPiece {
         rulesForKing.add(new HorizontalRuleMove(1));
         rulesForKing.add(new VerticalMoveRule(1));
         rulesPerPiece.put(Pieces.KING, rulesForKing);
-
+        //RULER PER SUPER PAWN
+        ArrayList<Rule> rulesForSuperPawn = new ArrayList<>();
+        rulesForSuperPawn.add( new VerticalMoveRule(1));
+        rulesForSuperPawn.add(new DiagonalMoveRule(1));
+        rulesForSuperPawn.add(new RabbitRule(2));
+        rulesPerPiece.put(Pieces.SUPER_PAWN, rulesForSuperPawn);
+        //RULES PER SUPER ROOK
+        ArrayList<Rule> rulesForSuperRook = new ArrayList<>();
+        rulesForSuperRook.add(new VerticalMoveRule(-1));
+        rulesForSuperRook.add(new HorizontalRuleMove(-1));
+        rulesForSuperPawn.add(new DiagonalMoveRule(1));
+        rulesPerPiece.put(Pieces.SUPER_ROOK, rulesForSuperRook);
     }
     public ArrayList<Rule> getRulesPerPiece(Piece piece){
          return rulesPerPiece.get(piece.getName());

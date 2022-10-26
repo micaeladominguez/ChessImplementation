@@ -16,8 +16,8 @@ public class DiagonalMoveRule implements Rule {
 
     @Override
     public RuleResponse isMovePossible(Board board, Position positionTo, Position positionFrom) {
-
-        if(positionFrom.getPiece().get().getName() == Pieces.PAWN){
+        if(positionFrom.getPiece().get().getName() == Pieces.PAWN ||
+                positionFrom.getPiece().get().getName() == Pieces.SUPER_ROOK){
             if(positionTo.getPiece().isEmpty()) return new RuleResponse(false, MoveType.DIAGONAL );
         }
 

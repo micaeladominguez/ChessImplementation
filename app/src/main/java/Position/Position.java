@@ -2,12 +2,26 @@ package Position;
 
 import Piece.Piece;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class Position implements PositionInterface{
     protected Optional<Piece> possiblePiece;
     protected final int row;
     protected final int column;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return row == position.row && column == position.column;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( row, column);
+    }
 
     public Position(int row, int column) {
         this.row = row;

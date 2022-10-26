@@ -65,7 +65,7 @@ public class MovementValidator {
         return positionTo.getPiece().isEmpty() || positionTo.getPiece().get().getColor() != positionFrom.getPiece().get().getColor();
     }
 
-    public boolean imOnCheckRuleAtLeastOne(Board board, Colors reference, RulesPerPiece rules) {
+    public ResponseCheck imOnCheckRuleAtLeastOne(Board board, Colors reference, RulesPerPiece rules) {
         Colors color = Colors.BLACK;
         if(reference == Colors.BLACK){
             color = Colors.WHITE;

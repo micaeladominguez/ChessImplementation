@@ -9,6 +9,7 @@ import Piece.Pieces;
 import Player.Player;
 import Position.Position;
 import Rule.MovementValidator;
+import Rule.ResponseCheck;
 
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -45,9 +46,11 @@ public class Game {
         Position positionTo = board.getBoard()[rowTo][columnTo];
         if(!checkPiece(positionFrom)) return new GameResponse("No piece selected", TypeOfResponse.INCORRECT_MOVE);
         if(!checkTurn(positionFrom))  return new GameResponse("It's not your turn", TypeOfResponse.INCORRECT_MOVE);
-        if(movementValidator.imOnCheckRuleAtLeastOne(board, reference, rulesPerPiece) &&
+        ResponseCheck responseCheck = movementValidator.imOnCheckRuleAtLeastOne(board, reference, rulesPerPiece);
+        if(responseCheck.isCheck() &&
                 positionFrom.getPiece().isPresent() &&
                 positionFrom.getPiece().get().getName() != Pieces.KING
+                && responseCheck.getWhichOnes().contains(positionFrom)
         )  return new GameResponse("Is not possible you should move your king " ,TypeOfResponse.INCORRECT_MOVE);
         if( movementValidator.isMovePossible(board,positionTo, positionFrom,rulesPerPiece.getRulesPerPiece(positionFrom.getPiece().get()))){
             if(eatKing(positionTo)) return new GameResponse("The game is finish, the winner is ", TypeOfResponse.GAME_OVER);

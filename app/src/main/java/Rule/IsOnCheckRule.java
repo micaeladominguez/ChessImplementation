@@ -33,12 +33,22 @@ public class IsOnCheckRule {
         }
         return forAllMoves;
     }
-    public boolean checkAnyMovement(ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board){
-        boolean[] forAllMoves = getAllHacks(positionsFromPieces, possibleMovementsForKing, rules, board);
-        for (boolean forAllMove : forAllMoves) {
-            if (forAllMove) return true;
+    public ResponseCheck checkAnyMovement(ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board){
+        ResponseCheck responseCheck = new ResponseCheck();
+        getAllHacks(responseCheck, positionsFromPieces, possibleMovementsForKing, rules, board);
+        return responseCheck;
+    }
+
+    public void getAllHacks(ResponseCheck responseCheck, ArrayList<Position> positionsFromPieces, ArrayList<Position> possibleMovementsForKing, RulesPerPiece rules, Board board){
+        for (int i = 0; i < possibleMovementsForKing.size(); i++) {
+            for (Position positionsFromPiece : positionsFromPieces) {
+                if (positionsFromPiece.getPiece().isPresent()) {
+                    if (isMovePossibleWithoutCrash(board, possibleMovementsForKing.get(i), positionsFromPiece, rules.getRulesPerPiece(positionsFromPiece.getPiece().get()))) {
+                        responseCheck.addPosition(positionsFromPiece);
+                    }
+                }
+            }
         }
-        return false;
     }
     public boolean isMovePossibleWithoutCrash(Board board, Position positionTo, Position positionFrom, List<Rule> rules){
         for(Rule rule: rules){

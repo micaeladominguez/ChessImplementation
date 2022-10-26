@@ -7,6 +7,8 @@ public enum Pieces {
     PAWN,
     QUEEN,
     ROOK,
+    SUPER_PAWN,
+    SUPER_ROOK,
 }
 
 

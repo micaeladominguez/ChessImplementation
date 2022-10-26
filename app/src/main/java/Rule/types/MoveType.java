@@ -6,6 +6,6 @@ public enum MoveType {
     VERTICAL,
     HORSE,
     SKIP,
-
     CASTLING,
+    RABBIT,
 }

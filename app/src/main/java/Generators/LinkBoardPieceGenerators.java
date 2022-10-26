@@ -1,43 +1,20 @@
 package Generators;
 
 import Board.Tuple;
-import Piece.Colors;
-import Piece.Pieces;
 import Position.Position;
+
+import java.util.Map;
 
 public class LinkBoardPieceGenerators {
     public static Position[][] linkBoardPieceGenerator(){
         Position[][] board = BoardGenerator.createBoard(new Tuple(8,8));
+        PieceGenerator pieceGenerator = new PieceGenerator();
+        Map<Tuple, PieceColor> pieceRelation = pieceGenerator.getInitialPositionForPieces();
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if(i == 0){
-                    if(j == 0 || j == board[0].length - 1){
-                        board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.WHITE, Pieces.ROOK) );
-                    }else if(j == 1 || j == board[0].length - 2){
-                        board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.WHITE, Pieces.HORSE) );
-                    }else if(j == 2 || j == board[0].length - 3){
-                        board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.WHITE, Pieces.BISHOP) );
-                    }else if(j == 3){
-                        board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.WHITE, Pieces.QUEEN) );
-                    }else{
-                        board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.WHITE, Pieces.KING) );
-                    }
-                }else if(i == 1){
-                    board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.WHITE, Pieces.PAWN) );
-                }else if(i == 6){
-                    board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.BLACK, Pieces.PAWN) );
-                }else if(i == 7){
-                    if(j == 0 || j == board[0].length - 1){
-                        board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.BLACK, Pieces.ROOK) );
-                    }else if(j == 1 || j == board[0].length - 2){
-                        board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.BLACK, Pieces.HORSE) );
-                    }else if(j == 2 || j == board[0].length - 3){
-                        board[i][j].insertPiece( PieceGenerator.generatePiece(Colors.BLACK, Pieces.BISHOP) );
-                    }else if(j == 3){
-                        board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.BLACK, Pieces.QUEEN) );
-                    }else{
-                        board[i][j].insertPiece(PieceGenerator.generatePiece(Colors.BLACK, Pieces.KING) );
-                    }
+            for (int j = 0; j < board[i].length; j++) {
+                PieceColor possible = pieceRelation.get(new Tuple(i, j));
+                if(possible != null){
+                    board[i][j].insertPiece(pieceGenerator.generatePiece(possible.getColor(), possible.getPiece()));
                 }
             }
         }
