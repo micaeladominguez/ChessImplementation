@@ -1,0 +1,146 @@
+@startuml
+
+class Board {
+ - board: Position[][]
+ - whiteKingPointer: Tuple
+ - blackKingPointer: Tuple
+ - maxEdges: Tuple
+
+ + getKingPosition(Colors color) : Position
+ + searchForPiece(Colors color) : Position[]
+ + movePieceToPosition(Position positionTo, Piece piece, Position positionFrom)
+ + movePieceFromPosition(position)
+ + rollBackLastMove(Position positionTo, Position positionFrom, LastMovement lastMovement)
+
+}
+
+class Tuple {
+  - column : Int
+  - row : Int
+}
+
+
+interface PositionI {
+    + getPiece() : Optional<Piece>
+    + insertPiece(piece)
+    + getRow() : Int
+    + getColumn() : Int
+    + deletePiece() : Optional<Piece>
+    + isEmpty() : boolean
+}
+
+class Position implements PositionI {
+    - possiblePiece
+    - row
+    - column
+}
+
+interface PieceInterface {
+    + getColor()
+    + getName(): Pieces
+    + isDead() : Boolean
+    + moves() : Int
+    + addMove()
+}
+class Piece implements PieceInterface{
+    - id : Long
+    - color : Colors
+    - countOfMovements : Int
+}
+
+enum Pieces {
+    BISHOP
+    HORSE
+    KING
+    PAWN
+    QUEEN
+    ROOK
+    SUPER_PAWN
+    SUPER_ROOK
+}
+
+enum Colors {
+    WHITE
+    BLACK
+}
+
+interface Generator {
+    + generate()
+}
+
+class BoardGenerator implements Generator {
+  - board : Position[][]
+}
+
+class  LinkBoardPieceGenerators implements Generator {
+  - board : Position[][]
+}
+
+class PieceGenerator implements Generator {
+  - initialPositionForPieces : Map<Tuple, PieceColor>
+  + generatePieces() : Piece
+}
+
+class PlayerGenerator implements Generator {
+   - players : Player[]
+}
+
+class RulesPerPiece implements Generator {
+   - rulesPerPiece: EnumMap<Pieces, ArrayList<Rule>>
+}
+
+interface Rule {
+    + isMovePossible(Board board, Position positionTo, Position positionFrom) : RuleResponse
+}
+
+class RuleResponse {
+    - response: boolean
+    - moveType: MoveType
+}
+
+enum MoveType {
+    DIAGONAL
+    HORIZONTAL
+    VERTICAL
+    HORSE
+    SKIP
+    CASTLING
+    RABBIT
+}
+
+class CastlingRule implements Rule {}
+
+class MaxBoardRule {
+    + isMovePossible(Board board, int column, int row) : boolean
+}
+
+class DiagonalMoveRule implements Rule {}
+class ForwardRule implements Rule {}
+class HorizontalRuleMove implements Rule {}
+class HorseMove implements Rule{}
+class RabbitRule implements Rule{}
+class VerticalMoveRule implements Rule{}
+
+class MoveValidator {
+  -  maxBoardRule : MaxBoardRule
+  -  noPieceCrash: NoPieceCrash
+  -  isOnCheckRule : IsOnCheckRule
+  + isMoveOutOfBoard(Board board,int column, int row) : boolean
+  + isMovePossible(Board board, Position positionTo, Position positionFrom, List<Rule> rules) : boolean
+  + isOnCheckRule(Board board, Colors reference, RulesPerPiece rules) : boolean
+  + imOnCheckRule(Board board, Colors reference, RulesPerPiece rules) : boolean
+  + sameColorRule(Position positionTo, Position positionFrom) : boolean
+  + imOnCheckRuleAtLeastOne(Board board, Colors reference, RulesPerPiece rules) : boolean
+}
+
+class Game {
+    - board : Board
+    - activePlayers: Player[]
+    - rulesPerPiece: RulesPerPiece
+    - reference: Colors
+    - movementValidator: MoveValidator
+    + startGame()
+    + possibleMovement(int rowTo, int columnTo, int rowFrom, int columnFrom) : GameResponse
+}
+
+@enduml

@@ -11,6 +11,14 @@ public class NoPieceCrash {
         if(moveType == MoveType.HORIZONTAL) return checkHorizontalMove(board, positionTo, positionFrom);
         if(moveType == MoveType.VERTICAL) return checkVerticalMove(board, positionTo, positionFrom);
         if(moveType == MoveType.DIAGONAL) return checkDiagonalMove(board, positionTo, positionFrom);
+        if(moveType == MoveType.CASTLING) return checkCastlingMove(board, positionTo, positionFrom);
+        return true;
+    }
+
+    private boolean checkCastlingMove(Board board, Position positionTo, Position positionFrom) {
+        for (int i = positionFrom.getColumn() + 1; i < positionTo.getColumn(); i++) {
+            if(!board.getBoard()[positionFrom.getRow()][i].isEmpty()) return false;
+        }
         return true;
     }
 

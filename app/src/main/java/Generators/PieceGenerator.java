@@ -9,12 +9,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class PieceGenerator {
+public class PieceGenerator implements Generator{
     protected Map<Tuple, PieceColor> initialPositionForPieces = new HashMap<>();
     public static Piece generatePiece(Colors color, Pieces piece){
         return new Piece(color, piece);
     }
-    public Map<Tuple, PieceColor> getInitialPositionForPieces(){
+
+    public Map<Tuple, PieceColor> getInitialPositionForPieces() {
+        return initialPositionForPieces;
+    }
+
+    @Override
+    public void generate() {
         initialPositionForPieces.put(new Tuple(0,0), new PieceColor(Pieces.ROOK, Colors.WHITE));
         initialPositionForPieces.put(new Tuple(0,1),  new PieceColor(Pieces.HORSE, Colors.WHITE));
         initialPositionForPieces.put(new Tuple(0,2),  new PieceColor(Pieces.BISHOP, Colors.WHITE));
@@ -51,9 +57,5 @@ public class PieceGenerator {
         initialPositionForPieces.put(new Tuple(7,6), new PieceColor(Pieces.HORSE, Colors.BLACK));
         initialPositionForPieces.put(new Tuple(7,7), new PieceColor(Pieces.ROOK, Colors.BLACK));
 
-        return initialPositionForPieces;
     }
-
-
-
 }

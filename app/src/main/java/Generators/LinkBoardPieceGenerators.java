@@ -5,10 +5,19 @@ import Position.Position;
 
 import java.util.Map;
 
-public class LinkBoardPieceGenerators {
-    public static Position[][] linkBoardPieceGenerator(){
-        Position[][] board = BoardGenerator.createBoard(new Tuple(8,8));
+public class LinkBoardPieceGenerators implements  Generator{
+     Position[][]  board;
+    public Position[][] getBoard() {
+        return board;
+    }
+
+    @Override
+    public void generate() {
+        BoardGenerator boardGenerator = new BoardGenerator();
+        boardGenerator.generate();
+        Position[][] board = boardGenerator.getBoard() ;
         PieceGenerator pieceGenerator = new PieceGenerator();
+        pieceGenerator.generate();
         Map<Tuple, PieceColor> pieceRelation = pieceGenerator.getInitialPositionForPieces();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -18,6 +27,6 @@ public class LinkBoardPieceGenerators {
                 }
             }
         }
-        return board;
+        this.board = board;
     }
 }

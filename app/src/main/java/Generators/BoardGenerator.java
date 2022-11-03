@@ -1,16 +1,22 @@
 package Generators;
 
-import Board.Tuple;
 import Position.Position;
 
-public class BoardGenerator {
-    public static Position[][] createBoard(Tuple maxEdges){
-        Position[][] board = new Position[maxEdges.getRow()][maxEdges.getColumn()];
-        for (int i = 0; i < maxEdges.getRow(); i++) {
-            for(int j= 0; j < maxEdges.getColumn(); j ++){
+public class BoardGenerator implements Generator{
+    public Position[][] board;
+
+    public Position[][] getBoard() {
+        return board;
+    }
+
+    @Override
+    public void generate() {
+        Position[][] board = new Position[8][8];
+        for (int i = 0; i < 8; i++) {
+            for(int j= 0; j < 8; j ++){
                 board[i][j] = new Position(i,j);
             }
         }
-        return board;
+        this.board = board;
     }
 }

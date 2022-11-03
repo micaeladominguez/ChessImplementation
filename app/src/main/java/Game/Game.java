@@ -33,11 +33,13 @@ public class Game {
 
     public void startGame(){
         this.startTime =  new Timestamp(System.currentTimeMillis());
-        this.activePlayers = PlayerGenerator.generatePlayers();
+        PlayerGenerator playerGenerator = new PlayerGenerator();
+        playerGenerator.generate();
+        this.activePlayers = playerGenerator.getPlayers();
         this.lastMovement = new LastMovement();
         if(activePlayers[0].getColors() == Colors.WHITE) this.reference = Colors.WHITE;
         else this.reference = Colors.BLACK;
-        this.rulesPerPiece.generateRules();
+        this.rulesPerPiece.generate();
     }
 
     public GameResponse possibleMovement(int rowTo, int columnTo, int rowFrom, int columnFrom) {
@@ -47,11 +49,15 @@ public class Game {
         if(!checkPiece(positionFrom)) return new GameResponse("No piece selected", TypeOfResponse.INCORRECT_MOVE);
         if(!checkTurn(positionFrom))  return new GameResponse("It's not your turn", TypeOfResponse.INCORRECT_MOVE);
         ResponseCheck responseCheck = movementValidator.imOnCheckRuleAtLeastOne(board, reference, rulesPerPiece);
-        if(responseCheck.isCheck() &&
-                positionFrom.getPiece().isPresent() &&
-                positionFrom.getPiece().get().getName() != Pieces.KING
-                && responseCheck.getWhichOnes().contains(positionFrom)
-        )  return new GameResponse("Is not possible you should move your king " ,TypeOfResponse.INCORRECT_MOVE);
+        for(Position position : responseCheck.getWhichOnes()){
+            System.out.println(position.toString());
+        }
+        System.out.println("I'm on check" + responseCheck.isCheck());
+        if(responseCheck.isCheck() && positionFrom.getPiece().isPresent()) {
+            if(positionFrom.getPiece().get().getName() != Pieces.KING && !responseCheck.getWhichOnes().contains(positionTo)){
+                return new GameResponse("Is not possible you should move your king " ,TypeOfResponse.INCORRECT_MOVE);
+            }
+        }
         if( movementValidator.isMovePossible(board,positionTo, positionFrom,rulesPerPiece.getRulesPerPiece(positionFrom.getPiece().get()))){
             if(eatKing(positionTo)) return new GameResponse("The game is finish, the winner is ", TypeOfResponse.GAME_OVER);
             setLastMovement(positionFrom);

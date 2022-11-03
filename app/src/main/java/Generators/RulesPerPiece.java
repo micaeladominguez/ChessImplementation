@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 
 import Rule.CastlingRule;
-public class RulesPerPiece {
+public class RulesPerPiece implements Generator {
     protected EnumMap<Pieces, ArrayList<Rule>> rulesPerPiece;
-
-    public void generateRules(){
+    @Override
+    public void generate() {
         rulesPerPiece = new EnumMap<>(Pieces.class);
         //RULES PER PAWN
         ArrayList<Rule> rulesForPawn = new ArrayList<>();
@@ -57,13 +57,13 @@ public class RulesPerPiece {
         ArrayList<Rule> rulesForSuperRook = new ArrayList<>();
         rulesForSuperRook.add(new VerticalMoveRule(-1));
         rulesForSuperRook.add(new HorizontalRuleMove(-1));
-        rulesForSuperPawn.add(new DiagonalMoveRule(1));
+        rulesForSuperRook.add(new DiagonalMoveRule(1));
         rulesPerPiece.put(Pieces.SUPER_ROOK, rulesForSuperRook);
+
     }
     public ArrayList<Rule> getRulesPerPiece(Piece piece){
          return rulesPerPiece.get(piece.getName());
-    };
-
+    }
     public ArrayList<Position> getPossibleMovementsForKing(Board board, Position kingPosition) {
         ArrayList<Position> positions = new ArrayList<>();
         positions.add(kingPosition);
@@ -110,10 +110,5 @@ public class RulesPerPiece {
             }
         }
         return positions;
-    }
-
-    public Rule getSpecificRule(String ruleType){
-        if(ruleType == "HORIZONTAL") return new HorizontalRuleMove(-1);
-        else return new VerticalMoveRule(-1);
     }
 }

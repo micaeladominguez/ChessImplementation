@@ -8,6 +8,7 @@ import Rule.types.MoveType;
 import Rule.types.RuleResponse;
 
 public class DiagonalMoveRule implements Rule {
+    ForwardRule forwardRule = new ForwardRule();
     int limit;
 
     public DiagonalMoveRule(int limit) {
@@ -17,21 +18,26 @@ public class DiagonalMoveRule implements Rule {
     @Override
     public RuleResponse isMovePossible(Board board, Position positionTo, Position positionFrom) {
         if(positionFrom.getPiece().get().getName() == Pieces.PAWN ||
-                positionFrom.getPiece().get().getName() == Pieces.SUPER_ROOK){
+                positionFrom.getPiece().get().getName() == Pieces.SUPER_ROOK ||
+                positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN){
             if(positionTo.getPiece().isEmpty()) return new RuleResponse(false, MoveType.DIAGONAL );
         }
-
+        if(positionFrom.getPiece().get().getName() == Pieces.PAWN ||
+                positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN){
+            if(!forwardRule.isMovePossible(board, positionTo, positionFrom).isResponse())
+                return new RuleResponse(false, MoveType.DIAGONAL );
+        }
         int fromRow = positionFrom.getRow();
         int fromCol = positionFrom.getColumn();
         int toRow = positionTo.getRow();
         int toCol = positionTo.getColumn();
-        int rowIterator = 0;
+        int rowIterator;
         if (fromRow > toRow)
             rowIterator = -1;
         else
             rowIterator =1;
 
-        int colIterator = 0;
+        int colIterator;
         if (fromCol > toCol)
             colIterator = -1;
         else
@@ -46,7 +52,6 @@ public class DiagonalMoveRule implements Rule {
                 index -= index;
             }
         }
-
         return new RuleResponse((fromRow == toRow && fromCol == toCol), MoveType.DIAGONAL );
     }
 }

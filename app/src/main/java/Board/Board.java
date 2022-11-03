@@ -7,7 +7,6 @@ import Piece.Colors;
 import Piece.Piece;
 import Piece.Pieces;
 import Position.Position;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -17,41 +16,23 @@ public class Board {
     protected Tuple whiteKingPointer ;
     protected Tuple blackKingPointer;
 
-
-
     protected Tuple maxEdges;
 
     public Board(int maxColumn, int maxRow ) {
         this.maxEdges = new Tuple(maxColumn, maxRow);
-        generateBoard(maxEdges);
+        generateBoard();
     }
 
-    private void generateBoard(Tuple maxEdges) {
-        this.board = LinkBoardPieceGenerators.linkBoardPieceGenerator();
+    private void generateBoard() {
+        LinkBoardPieceGenerators linkBoardPieceGenerators = new LinkBoardPieceGenerators();
+        linkBoardPieceGenerators.generate();
+        this.board = linkBoardPieceGenerators.getBoard();
         this.whiteKingPointer = new Tuple(0,4);
         this.blackKingPointer = new Tuple(7, 4);
     }
-
     public Position[][] getBoard(){
         return this.board;
     }
-    public String boardToString(){
-        String main = "";
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if(board[i][j].getPiece().isPresent()){
-                    main = main + " [" + board[i][j].pieceToString() + "]";
-                }else{
-                    main = main + " [                ]";
-                }
-            }
-            main = main + "\n";
-        }
-        main = main + "   " + "      0       " + "     " + "      1       " + "     " + "      2       " + "     " + "      3       " + "     " +"      4       " +
-                "     " + "      5       " +  "     " + "      6       " + "     " + "      7       ";
-        return main;
-    }
-
     public Position getKingPosition(Colors color) {
         if(color == Colors.WHITE){
             return this.board[whiteKingPointer.row][whiteKingPointer.column];
@@ -59,7 +40,6 @@ public class Board {
             return this.board[blackKingPointer.row][blackKingPointer.column];
         }
     }
-
     public ArrayList<Position> searchForPiece( Colors color){
         ArrayList<Position> positions = new ArrayList<>();
         for (int i = 0; i < maxEdges.getRow(); i++) {

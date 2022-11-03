@@ -1,6 +1,5 @@
 package Piece;
 
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Piece implements PieceInterface {
     private static int count = 0;
@@ -9,14 +8,12 @@ public class Piece implements PieceInterface {
     }
     protected final long id;
     protected final Colors color;
-    protected boolean dead;
     protected int countOfMovements;
     protected  Pieces type ;
 
     public Piece(Colors color, Pieces type) {
         this.id = ++count;
         this.color = color;
-        this.dead = false;
         this.countOfMovements = 0;
         this.type = type;
     }
@@ -30,11 +27,6 @@ public class Piece implements PieceInterface {
     public Pieces getName() {
         return type;
     }
-    @Override
-    public boolean isDead() {
-        return this.dead;
-    }
-
     @Override
     public int moves() {
         return this.countOfMovements;

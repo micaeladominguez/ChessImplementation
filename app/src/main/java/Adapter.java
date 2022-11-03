@@ -16,7 +16,7 @@ public class Adapter {
                 if(!board.getBoard()[i][j].isEmpty()){
                     if(board.getBoard()[i][j].getPiece().isPresent()){
                         Piece piece = board.getBoard()[i][j].getPiece().get();
-                            chessPieces.add(new ChessPiece(String.valueOf(piece.getId()), parseColor(piece.getColor()), new Position(i + 1, j + 1), parseTypeOfPiece(piece.getName())));
+                        chessPieces.add(new ChessPiece(String.valueOf(piece.getId()), parseColor(piece.getColor()), new Position(i + 1, j + 1), parseTypeOfPiece(piece.getName())));
                     }
 
                 }

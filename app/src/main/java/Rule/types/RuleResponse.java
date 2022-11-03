@@ -1,6 +1,5 @@
 package Rule.types;
 
-import Rule.types.MoveType;
 
 public class RuleResponse {
     protected boolean response;
@@ -15,15 +14,10 @@ public class RuleResponse {
         return response;
     }
 
-    public void setResponse(boolean response) {
-        this.response = response;
-    }
-
     public MoveType getMoveType() {
         return moveType;
     }
-
-    public void setMoveType(MoveType moveType) {
-        this.moveType = moveType;
+    public String toString(){
+        return " MoveType : " + moveType.toString() + " Available : " + response;
     }
 }
