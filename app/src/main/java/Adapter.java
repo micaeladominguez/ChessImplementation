@@ -6,8 +6,8 @@ import edu.austral.dissis.chess.gui.Position;
 
 import java.util.ArrayList;
 import java.util.List;
-import Piece.Colors;
-import Piece.Pieces;
+import Piece.ColorType;
+import Piece.PieceType;
 public class Adapter {
     public List<ChessPiece> getPieces(Board board){
         ArrayList<ChessPiece> chessPieces = new ArrayList<>();
@@ -25,15 +25,15 @@ public class Adapter {
         return chessPieces;
     }
 
-    public PlayerColor parseColor(Colors reference) {
-        if(reference == Colors.BLACK){
+    public PlayerColor parseColor(ColorType reference) {
+        if(reference == ColorType.BLACK){
             return  PlayerColor.BLACK;
         }else{
             return PlayerColor.WHITE;
         }
     }
 
-    public String parseTypeOfPiece(Pieces pieces){
+    public String parseTypeOfPiece(PieceType pieces){
         switch (pieces){
             case KING -> {
                 return "king";

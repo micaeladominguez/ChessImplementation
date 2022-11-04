@@ -1,7 +1,7 @@
 package Rule;
 
 import Board.Board;
-import Piece.Pieces;
+import Piece.PieceType;
 import Position.Position;
 import Rule.types.MoveType;
 
@@ -64,8 +64,8 @@ public class NoPieceCrash {
                 if(!board.getBoard()[i][column].isEmpty()) return false;
             }
         }
-        if(positionFrom.getPiece().isPresent() & positionFrom.getPiece().get().getName() == Pieces.PAWN ||
-                positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN){
+        if(positionFrom.getPiece().isPresent() & positionFrom.getPiece().get().getName() == PieceType.PAWN ||
+                positionFrom.getPiece().get().getName() == PieceType.SUPER_PAWN){
             if(!positionTo.isEmpty()){
                 return false;
             }

@@ -1,8 +1,8 @@
 package Piece;
 
 public interface PieceInterface {
-     Colors getColor();
-     Pieces getName();
+     ColorType getColor();
+     PieceType getName();
      int  moves();
      void addMove();
 

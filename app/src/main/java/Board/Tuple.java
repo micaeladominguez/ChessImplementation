@@ -39,4 +39,8 @@ public class Tuple {
     public int hashCode() {
         return Objects.hash(column, row);
     }
+
+    public String toString(){
+        return "Row : " + row + " Column: " + column;
+    }
 }

@@ -3,10 +3,11 @@ package Board;
 
 import Game.LastMovement;
 import Generators.LinkBoardPieceGenerators;
-import Piece.Colors;
+import Piece.ColorType;
 import Piece.Piece;
-import Piece.Pieces;
+import Piece.PieceType;
 import Position.Position;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -18,29 +19,41 @@ public class Board {
 
     protected Tuple maxEdges;
 
-    public Board(int maxColumn, int maxRow ) {
+    public Board(int maxColumn, int maxRow, Tuple whiKing,
+                 Tuple blKing) {
         this.maxEdges = new Tuple(maxColumn, maxRow);
-        generateBoard();
+        generateBoard(whiKing,blKing);
     }
 
-    private void generateBoard() {
-        LinkBoardPieceGenerators linkBoardPieceGenerators = new LinkBoardPieceGenerators();
-        linkBoardPieceGenerators.generate();
-        this.board = linkBoardPieceGenerators.getBoard();
-        this.whiteKingPointer = new Tuple(0,4);
-        this.blackKingPointer = new Tuple(7, 4);
+    private void generateBoard(Tuple positionWhiteKing, Tuple positionBlackKing) {
+        this.board = generateBoard();
+        System.out.println("White king " +  positionWhiteKing.toString());
+        System.out.println("Black king " +  positionBlackKing.toString());
+        this.whiteKingPointer = positionWhiteKing;
+        this.blackKingPointer = positionBlackKing;
     }
+
+    private Position[][] generateBoard() {
+        LinkBoardPieceGenerators linkBoardPieceGenerators = new LinkBoardPieceGenerators();
+        linkBoardPieceGenerators.generate(maxEdges.row, maxEdges.column);
+        return linkBoardPieceGenerators.getBoard();
+    }
+
     public Position[][] getBoard(){
         return this.board;
     }
-    public Position getKingPosition(Colors color) {
-        if(color == Colors.WHITE){
+    public Position getKingPosition(ColorType color) {
+        if(color == ColorType.WHITE){
             return this.board[whiteKingPointer.row][whiteKingPointer.column];
         }else{
             return this.board[blackKingPointer.row][blackKingPointer.column];
         }
     }
-    public ArrayList<Position> searchForPiece( Colors color){
+
+    public Optional<Piece> getPieceIn(Integer row, Integer col) {
+        return board[row][col].getPiece();
+    }
+    public ArrayList<Position> searchForPiece(ColorType color){
         ArrayList<Position> positions = new ArrayList<>();
         for (int i = 0; i < maxEdges.getRow(); i++) {
             for (int j = 0; j < maxEdges.getColumn(); j++) {
@@ -53,18 +66,18 @@ public class Board {
         return positions;
     }
     public void movePieceToPosition(Position position, Piece piece, Position positionFrom){
-        if(piece.getName() == Pieces.KING && positionFrom.getRow() == position.getRow()
+        if(piece.getName() == PieceType.KING && positionFrom.getRow() == position.getRow()
                 && Math.abs(positionFrom.getColumn() - position.getColumn()) > 0){
                     doCastlingRotation(positionFrom, position, piece);
-        }else if(piece.getName() == Pieces.PAWN && (position.getRow() == 0 ||
+        }else if(piece.getName() == PieceType.PAWN && (position.getRow() == 0 ||
                 position.getRow() + 1 == maxEdges.row)){
-            piece.changeType(Pieces.QUEEN);
+            piece.changeType(PieceType.QUEEN);
             movePiece(position, piece);
         } else{
             movePiece(position, piece);
-            if(piece.getName() == Pieces.KING){
+            if(piece.getName() == PieceType.KING){
                 movePiece(position, piece);
-                if(piece.getColor() == Colors.WHITE) {
+                if(piece.getColor() == ColorType.WHITE) {
                     this.whiteKingPointer.setColumn(position.getColumn());
                     this.whiteKingPointer.setRow(position.getRow());
                 }else{
@@ -109,7 +122,7 @@ public class Board {
             if( rook.isPresent()){
                 movePiece(board[row][1],piece);
                 movePiece(board[row][2],rook.get());
-                if(piece.getColor() == Colors.WHITE) {
+                if(piece.getColor() == ColorType.WHITE) {
                     this.whiteKingPointer.setColumn(1);
                     this.whiteKingPointer.setRow(row);
                 }else{
@@ -121,7 +134,7 @@ public class Board {
             if(rook.isPresent()){
                 movePiece(board[row][6],piece);
                 movePiece(board[row][5],rook.get());
-                if(piece.getColor() == Colors.WHITE) {
+                if(piece.getColor() == ColorType.WHITE) {
                     this.whiteKingPointer.setColumn(6);
                     this.whiteKingPointer.setRow(row);
                 }else{
@@ -135,5 +148,9 @@ public class Board {
     public void rollBackLastMovement(Position positionTo, LastMovement lastMovement) {
         movePieceFromPosition(positionTo);
         movePieceToPosition(lastMovement.getPosition(), lastMovement.getPiece(), positionTo);
+    }
+
+    public Position getPosition(int rowFrom, int columnFrom) {
+        return this.board[rowFrom][columnFrom];
     }
 }

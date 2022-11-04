@@ -1,7 +1,6 @@
 package Rule.moves;
 
 import Board.Board;
-import Piece.Pieces;
 import Position.Position;
 import Rule.Rule;
 import Rule.types.MoveType;

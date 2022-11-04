@@ -2,113 +2,125 @@ package Generators;
 
 import Board.Board;
 import Piece.Piece;
-import Piece.Pieces;
+import Piece.PieceType;
 import Position.Position;
 import Rule.Rule;
 import Rule.moves.*;
-
+import Board.Tuple;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
 import Rule.CastlingRule;
-public class RulesPerPiece implements Generator {
-    protected EnumMap<Pieces, ArrayList<Rule>> rulesPerPiece;
-    @Override
+import javafx.geometry.Pos;
+
+public class RulesPerPiece {
+    Tuple maxEdges;
+    protected EnumMap<PieceType, ArrayList<Rule>> rulesPerPiece;
     public void generate() {
-        rulesPerPiece = new EnumMap<>(Pieces.class);
-        //RULES PER PAWN
-        ArrayList<Rule> rulesForPawn = new ArrayList<>();
-        rulesForPawn.add( new VerticalMoveRule(1));
-        rulesForPawn.add(new DiagonalMoveRule(1));
-        rulesPerPiece.put(Pieces.PAWN, rulesForPawn);
-        //RULES PER HORSE
-        ArrayList<Rule> rulesForHorse = new ArrayList<>();
-        rulesForHorse.add(new HorseMove());
-        rulesPerPiece.put(Pieces.HORSE, rulesForHorse);
-        //RULES PER ROOK
-        ArrayList<Rule> rulesForRook = new ArrayList<>();
-        rulesForRook.add(new VerticalMoveRule(-1));
-        rulesForRook.add(new HorizontalRuleMove(-1));
-        rulesPerPiece.put(Pieces.ROOK, rulesForRook);
-        //RULES PER BISHOP
-        ArrayList<Rule> rulesForBishop = new ArrayList<>();
-        rulesForBishop.add(new DiagonalMoveRule(-1));
-        rulesPerPiece.put(Pieces.BISHOP, rulesForBishop);
-        //RULES PER QUEEN
-        ArrayList<Rule> rulesForQueen = new ArrayList<>();
-        rulesForQueen.add(new DiagonalMoveRule(-1));
-        rulesForQueen.add(new HorizontalRuleMove(-1));
-        rulesForQueen.add(new VerticalMoveRule(-1));
-        rulesPerPiece.put(Pieces.QUEEN, rulesForQueen);
-        //RULES PER KING
+        rulesPerPiece = new EnumMap<>(PieceType.class);
+        rulesPawn();
+        rulesHorse();
+        rulesRook();
+        rulesBishop();
+        rulesQueen();
+        rulesKing();
+        rulesSuperPawn();
+        rulesSuperRook();
+    }
+
+    private void rulesSuperRook() {
+        ArrayList<Rule> rulesForSuperRook = new ArrayList<>();
+        rulesForSuperRook.add(new VerticalMoveRule(-1));
+        rulesForSuperRook.add(new HorizontalRuleMove(-1));
+        rulesForSuperRook.add(new DiagonalMoveRule(1));
+        rulesPerPiece.put(PieceType.SUPER_ROOK, rulesForSuperRook);
+    }
+
+    private void rulesSuperPawn() {
+        ArrayList<Rule> rulesForSuperPawn = new ArrayList<>();
+        rulesForSuperPawn.add( new VerticalMoveRule(1));
+        rulesForSuperPawn.add(new DiagonalMoveRule(1));
+        rulesForSuperPawn.add(new RabbitRule(2));
+        rulesPerPiece.put(PieceType.SUPER_PAWN, rulesForSuperPawn);
+    }
+
+    private void rulesKing() {
         ArrayList<Rule> rulesForKing = new ArrayList<>();
         rulesForKing.add(new CastlingRule());
         rulesForKing.add(new DiagonalMoveRule(1));
         rulesForKing.add(new HorizontalRuleMove(1));
         rulesForKing.add(new VerticalMoveRule(1));
-        rulesPerPiece.put(Pieces.KING, rulesForKing);
-        //RULER PER SUPER PAWN
-        ArrayList<Rule> rulesForSuperPawn = new ArrayList<>();
-        rulesForSuperPawn.add( new VerticalMoveRule(1));
-        rulesForSuperPawn.add(new DiagonalMoveRule(1));
-        rulesForSuperPawn.add(new RabbitRule(2));
-        rulesPerPiece.put(Pieces.SUPER_PAWN, rulesForSuperPawn);
-        //RULES PER SUPER ROOK
-        ArrayList<Rule> rulesForSuperRook = new ArrayList<>();
-        rulesForSuperRook.add(new VerticalMoveRule(-1));
-        rulesForSuperRook.add(new HorizontalRuleMove(-1));
-        rulesForSuperRook.add(new DiagonalMoveRule(1));
-        rulesPerPiece.put(Pieces.SUPER_ROOK, rulesForSuperRook);
-
+        rulesPerPiece.put(PieceType.KING, rulesForKing);
     }
+
+    private void rulesQueen() {
+        ArrayList<Rule> rulesForQueen = new ArrayList<>();
+        rulesForQueen.add(new DiagonalMoveRule(-1));
+        rulesForQueen.add(new HorizontalRuleMove(-1));
+        rulesForQueen.add(new VerticalMoveRule(-1));
+        rulesPerPiece.put(PieceType.QUEEN, rulesForQueen);
+    }
+
+    private void rulesBishop() {
+        ArrayList<Rule> rulesForBishop = new ArrayList<>();
+        rulesForBishop.add(new DiagonalMoveRule(-1));
+        rulesPerPiece.put(PieceType.BISHOP, rulesForBishop);
+    }
+
+    private void rulesRook() {
+        ArrayList<Rule> rulesForRook = new ArrayList<>();
+        rulesForRook.add(new VerticalMoveRule(-1));
+        rulesForRook.add(new HorizontalRuleMove(-1));
+        rulesPerPiece.put(PieceType.ROOK, rulesForRook);
+    }
+
+    private void rulesHorse() {
+        ArrayList<Rule> rulesForHorse = new ArrayList<>();
+        rulesForHorse.add(new HorseMove());
+        rulesPerPiece.put(PieceType.HORSE, rulesForHorse);
+    }
+
+    private void rulesPawn() {
+        ArrayList<Rule> rulesForPawn = new ArrayList<>();
+        rulesForPawn.add( new VerticalMoveRule(1));
+        rulesForPawn.add(new DiagonalMoveRule(1));
+        rulesPerPiece.put(PieceType.PAWN, rulesForPawn);
+    }
+
     public ArrayList<Rule> getRulesPerPiece(Piece piece){
          return rulesPerPiece.get(piece.getName());
     }
     public ArrayList<Position> getPossibleMovementsForKing(Board board, Position kingPosition) {
         ArrayList<Position> positions = new ArrayList<>();
+        defineTuple(board);
         positions.add(kingPosition);
-        int row = kingPosition.getRow();
-        int column = kingPosition.getColumn();
-        if(column - 1 >= 0){
-            if(board.getBoard()[row][column - 1].isEmpty() || (board.getBoard()[row][column-1].getPiece().isPresent() && board.getBoard()[row][column-1].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row][column-1]);
-            }
-        }
-        if(column + 1 < board.getMaxEdges().getColumn()){
-            if(board.getBoard()[row][column + 1].isEmpty() || (board.getBoard()[row][column-1].getPiece().isPresent() && board.getBoard()[row][column+1].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row][column+1]);
-            }
-        }
-        if(row - 1 >= 0){
-            if(board.getBoard()[row - 1][column ].isEmpty() || (board.getBoard()[row - 1][column].getPiece().isPresent() && board.getBoard()[row - 1][column].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row - 1][column]);
-            }
-        }
-        if(row + 1 < board.getMaxEdges().getRow()){
-            if(board.getBoard()[row + 1][column].isEmpty() || (board.getBoard()[row + 1][column].getPiece().isPresent() && board.getBoard()[row + 1][column].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row + 1][column]);
-            }
-        }
-        if(row - 1 >= 0 && column - 1 >= 0 ){
-            if(board.getBoard()[row - 1][column - 1].isEmpty() || (board.getBoard()[row - 1][column - 1].getPiece().isPresent() && board.getBoard()[row - 1][column - 1].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row - 1][column - 1]);
-            }
-        }
-        if(row - 1 >= 0 && column + 1 < board.getMaxEdges().getColumn() ){
-            if(board.getBoard()[row - 1][column + 1].isEmpty() || (board.getBoard()[row - 1][column + 1].getPiece().isPresent() && board.getBoard()[row - 1][column + 1].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row - 1][column + 1]);
-            }
-        }
-        if(row + 1 < board.getMaxEdges().getRow() && column - 1 >= 0){
-            if(board.getBoard()[row + 1][column - 1].isEmpty() || (board.getBoard()[row + 1][column - 1].getPiece().isPresent() && board.getBoard()[row + 1][column - 1].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row + 1][column - 1]);
-            }
-        }
-        if(row + 1 < board.getMaxEdges().getRow() && column + 1 < board.getMaxEdges().getColumn()){
-            if(board.getBoard()[row + 1][column + 1].isEmpty() || (board.getBoard()[row + 1][column + 1].getPiece().isPresent() && board.getBoard()[row + 1][column + 1].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
-                positions.add(board.getBoard()[row + 1][column + 1]);
-            }
-        }
+        addPosition(0, -1, positions, board, kingPosition);
+        addPosition(0, 1, positions, board, kingPosition);
+        addPosition(-1, 0,positions, board, kingPosition );
+        addPosition(1, 0,positions, board, kingPosition );
+        addPosition(-1, -1,positions, board, kingPosition );
+        addPosition(-1, 1,positions, board, kingPosition );
+        addPosition(1, -1,positions, board, kingPosition );
+        addPosition(1, 1,positions, board, kingPosition );
         return positions;
+    }
+
+    private void defineTuple(Board board) {
+        if(this.maxEdges == null) this.maxEdges = board.getMaxEdges();
+    }
+
+    private void addPosition(int addRow, int addColumn, ArrayList<Position> positions, Board board, Position kingPosition) {
+        if(checkBoardRule(kingPosition.getRow() + addRow, kingPosition.getColumn() + addColumn)){
+            if(board.getBoard()[kingPosition.getRow() + addRow][kingPosition.getColumn() + addColumn].isEmpty() ||
+                            (board.getBoard()[kingPosition.getRow() + addRow][kingPosition.getColumn() + addColumn].getPiece().isPresent() &&
+                                    board.getBoard()[kingPosition.getRow() + addRow][kingPosition.getColumn() + addColumn].getPiece().get().getColor() != kingPosition.getPiece().get().getColor())){
+                positions.add(board.getBoard()[kingPosition.getRow() + addRow][kingPosition.getColumn() + addColumn]);
+            }
+        }
+    }
+
+    private boolean checkBoardRule(int row, int column) {
+        return row < maxEdges.getRow() && column < maxEdges.getColumn()
+                && row >= 0 && column >= 0;
     }
 }

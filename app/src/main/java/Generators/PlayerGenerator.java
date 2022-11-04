@@ -1,20 +1,19 @@
 package Generators;
 
-import Piece.Colors;
+import Piece.ColorType;
 import Player.Player;
 
-public class PlayerGenerator implements Generator {
+public class PlayerGenerator {
     Player[] players;
 
     public Player[] getPlayers() {
         return players;
     }
 
-    @Override
     public void generate() {
         Player[] players = new Player[2];
-        players[0] = new Player(Colors.WHITE);
-        players[1] = new Player(Colors.BLACK);
+        players[0] = new Player(ColorType.WHITE);
+        players[1] = new Player(ColorType.BLACK);
         this.players = players;
     }
 

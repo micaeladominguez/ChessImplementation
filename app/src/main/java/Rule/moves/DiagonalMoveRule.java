@@ -1,11 +1,12 @@
 package Rule.moves;
 
 import Board.Board;
-import Piece.Pieces;
+import Piece.PieceOperator;
 import Position.Position;
 import Rule.Rule;
 import Rule.types.MoveType;
 import Rule.types.RuleResponse;
+import org.jetbrains.annotations.NotNull;
 
 public class DiagonalMoveRule implements Rule {
     ForwardRule forwardRule = new ForwardRule();
@@ -17,41 +18,42 @@ public class DiagonalMoveRule implements Rule {
 
     @Override
     public RuleResponse isMovePossible(Board board, Position positionTo, Position positionFrom) {
-        if(positionFrom.getPiece().get().getName() == Pieces.PAWN ||
-                positionFrom.getPiece().get().getName() == Pieces.SUPER_ROOK ||
-                positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN){
-            if(positionTo.getPiece().isEmpty()) return new RuleResponse(false, MoveType.DIAGONAL );
-        }
-        if(positionFrom.getPiece().get().getName() == Pieces.PAWN ||
-                positionFrom.getPiece().get().getName() == Pieces.SUPER_PAWN){
-            if(!forwardRule.isMovePossible(board, positionTo, positionFrom).isResponse())
-                return new RuleResponse(false, MoveType.DIAGONAL );
-        }
-        int fromRow = positionFrom.getRow();
-        int fromCol = positionFrom.getColumn();
-        int toRow = positionTo.getRow();
-        int toCol = positionTo.getColumn();
-        int rowIterator;
-        if (fromRow > toRow)
-            rowIterator = -1;
-        else
-            rowIterator =1;
+        if(eatDiagonalCondition(positionFrom)) return new RuleResponse(false, MoveType.DIAGONAL );
+        if(!forwardCondition(board, positionTo, positionFrom)) return new RuleResponse(false, MoveType.DIAGONAL);
+        return checkDiagonalCondition(positionTo.getRow(), positionTo.getColumn(), positionFrom.getRow(), positionFrom.getColumn());
+    }
 
-        int colIterator;
-        if (fromCol > toCol)
-            colIterator = -1;
-        else
-            colIterator =1;
-
+    @NotNull
+    private RuleResponse checkDiagonalCondition(int toRow, int toCol, int fromRow, int fromCol) {
+        int rowIterator = fromRow > toRow ? - 1 : 1;
+        int colIterator = fromCol > toCol ? -1 : 1;
         int index = limit;
-
-        while (fromRow != toRow && fromCol != toCol  && index != 0) {
+        while (conditionCorrect(toRow, toCol, fromRow, fromCol, index)) {
             fromRow += rowIterator ;
             fromCol += colIterator ;
             if( limit != -1){
                 index -= index;
             }
         }
-        return new RuleResponse((fromRow == toRow && fromCol == toCol), MoveType.DIAGONAL );
+        return new RuleResponse((fromRow == toRow && fromCol == toCol), MoveType.DIAGONAL);
     }
+
+    private boolean conditionCorrect(int toRow, int toCol, int fromRow, int fromCol, int index) {
+        return fromRow != toRow && fromCol != toCol && index != 0;
+    }
+
+
+    private boolean forwardCondition(Board board, Position positionTo, Position positionFrom) {
+        if(PieceOperator.isTypeOfPawn(positionFrom.getPiece()) &&
+                !forwardRule.isMovePossible(board, positionTo, positionFrom).isCorrect()){
+                return false;
+        }
+        return true;
+    }
+
+    private static boolean eatDiagonalCondition(Position positionFrom) {
+        return !PieceOperator.exists(positionFrom.getPiece()) && (PieceOperator.isTypeOfPawn(positionFrom.getPiece())
+                || PieceOperator.isSuperRook(positionFrom.getPiece()));
+    }
+
 }

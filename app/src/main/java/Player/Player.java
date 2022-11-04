@@ -1,19 +1,19 @@
 package Player;
 
-import Piece.Colors;
+import Piece.ColorType;
 
 public class Player {
-    protected Colors colors;
+    protected ColorType colors;
 
-    public Player(Colors colors) {
+    public Player(ColorType colors) {
         this.colors = colors;
     }
 
-    public Colors getColors() {
+    public ColorType getColors() {
         return colors;
     }
 
-    public void setColors(Colors colors) {
+    public void setColors(ColorType colors) {
         this.colors = colors;
     }
 }

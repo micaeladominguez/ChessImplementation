@@ -10,7 +10,7 @@ public class RuleResponse {
         this.moveType = moveType;
     }
 
-    public boolean isResponse() {
+    public boolean isCorrect() {
         return response;
     }
 

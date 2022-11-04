@@ -1,6 +1,6 @@
 package Piece;
 
-public enum Pieces {
+public enum PieceType {
     BISHOP,
     HORSE ,
     KING,

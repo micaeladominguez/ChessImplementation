@@ -13,7 +13,7 @@ public class ResponseCheck {
         whichOnes.add(position);
     }
 
-    public boolean isCheck() {
+    public boolean isOnCheck() {
         return whichOnes.size() > 0;
     }
 

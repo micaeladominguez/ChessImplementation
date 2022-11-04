@@ -53,7 +53,7 @@ public class IsOnCheckRule {
     public boolean isMovePossibleWithoutCrash(Board board, Position positionTo, Position positionFrom, List<Rule> rules){
         for(Rule rule: rules){
             RuleResponse response = rule.isMovePossible(board, positionTo, positionFrom);
-            if(response.isResponse() && response.getMoveType() != MoveType.SKIP && response.getMoveType() != MoveType.HORSE){
+            if(response.isCorrect() && response.getMoveType() != MoveType.SKIP && response.getMoveType() != MoveType.HORSE){
                 return noPieceCrash.isMovePossible(board, positionTo, positionFrom, response.getMoveType());
             }
         }

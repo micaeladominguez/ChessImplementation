@@ -5,19 +5,18 @@ import Position.Position;
 
 import java.util.Map;
 
-public class LinkBoardPieceGenerators implements  Generator{
-     Position[][]  board;
+public class LinkBoardPieceGenerators{
+     Position[][] board;
     public Position[][] getBoard() {
         return board;
     }
 
-    @Override
-    public void generate() {
+    public void generate(int maxRow, int maxColumn) {
         BoardGenerator boardGenerator = new BoardGenerator();
-        boardGenerator.generate();
+        boardGenerator.generate(maxRow, maxColumn);
         Position[][] board = boardGenerator.getBoard() ;
         PieceGenerator pieceGenerator = new PieceGenerator();
-        pieceGenerator.generate();
+        pieceGenerator.generateNormalBoard();
         Map<Tuple, PieceColor> pieceRelation = pieceGenerator.getInitialPositionForPieces();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {

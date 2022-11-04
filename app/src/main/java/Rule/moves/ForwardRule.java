@@ -1,7 +1,7 @@
 package Rule.moves;
 
 import Board.Board;
-import Piece.Colors;
+import Piece.ColorType;
 import Position.Position;
 import Rule.Rule;
 import Rule.types.MoveType;
@@ -11,7 +11,7 @@ public class ForwardRule implements Rule {
     //BUSCO CHEQUEAR QUE VAYA PARA ADELANTE
     @Override
     public RuleResponse isMovePossible(Board board, Position positionTo, Position positionFrom) {
-        if(positionFrom.getPiece().isPresent() && positionFrom.getPiece().get().getColor() == Colors.WHITE){
+        if(positionFrom.getPiece().isPresent() && positionFrom.getPiece().get().getColor() == ColorType.WHITE){
             if( positionTo.getRow() > positionFrom.getRow()) return new RuleResponse(true, MoveType.SKIP);
         }else{
             if( positionTo.getRow() < positionFrom.getRow())

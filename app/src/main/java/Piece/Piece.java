@@ -7,11 +7,10 @@ public class Piece implements PieceInterface {
         return id;
     }
     protected final long id;
-    protected final Colors color;
+    protected final ColorType color;
     protected int countOfMovements;
-    protected  Pieces type ;
-
-    public Piece(Colors color, Pieces type) {
+    protected PieceType type ;
+    public Piece(ColorType color, PieceType type) {
         this.id = ++count;
         this.color = color;
         this.countOfMovements = 0;
@@ -19,12 +18,12 @@ public class Piece implements PieceInterface {
     }
 
     @Override
-    public Colors getColor() {
+    public ColorType getColor() {
         return this.color;
     }
 
     @Override
-    public Pieces getName() {
+    public PieceType getName() {
         return type;
     }
     @Override
@@ -38,9 +37,9 @@ public class Piece implements PieceInterface {
     }
 
     public String toString(){
-        if(type == Pieces.ROOK || type == Pieces.KING || type == Pieces.PAWN){
+        if(type == PieceType.ROOK || type == PieceType.KING || type == PieceType.PAWN){
             return " { " + color.toString() + "," + type.toString() + " } ";
-        }else if(type == Pieces.QUEEN || type == Pieces.HORSE ){
+        }else if(type == PieceType.QUEEN || type == PieceType.HORSE ){
             return " {" + color.toString() + "," + type.toString() + " } ";
         }else{
             return " {" + color.toString() + "," + type.toString() + "} ";
@@ -48,7 +47,7 @@ public class Piece implements PieceInterface {
 
     }
 
-    public void changeType(Pieces pieces){
+    public void changeType(PieceType pieces){
         this.type = pieces;
     }
 }

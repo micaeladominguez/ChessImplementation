@@ -2,16 +2,16 @@ package Generators;
 
 import Board.Tuple;
 import Piece.Piece;
-import Piece.Pieces;
-import Piece.Colors;
+import Piece.PieceType;
+import Piece.ColorType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class PieceGenerator implements Generator{
+public class PieceGenerator{
     protected Map<Tuple, PieceColor> initialPositionForPieces = new HashMap<>();
-    public static Piece generatePiece(Colors color, Pieces piece){
+    public static Piece generatePiece(ColorType color, PieceType piece){
         return new Piece(color, piece);
     }
 
@@ -19,43 +19,53 @@ public class PieceGenerator implements Generator{
         return initialPositionForPieces;
     }
 
-    @Override
-    public void generate() {
-        initialPositionForPieces.put(new Tuple(0,0), new PieceColor(Pieces.ROOK, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,1),  new PieceColor(Pieces.HORSE, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,2),  new PieceColor(Pieces.BISHOP, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,3),  new PieceColor(Pieces.QUEEN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,4),  new PieceColor(Pieces.KING, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,5), new PieceColor(Pieces.BISHOP, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,6), new PieceColor(Pieces.HORSE, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(0,7), new PieceColor(Pieces.ROOK, Colors.WHITE));
+    public void generateNormalBoard() {
+        definePosition(0,0, PieceType.ROOK, ColorType.WHITE);
+        definePosition(0,7, PieceType.ROOK, ColorType.WHITE);
 
-        initialPositionForPieces.put(new Tuple(1,0), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,1), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,2), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,3), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,4), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,5), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,6), new PieceColor(Pieces.PAWN, Colors.WHITE));
-        initialPositionForPieces.put(new Tuple(1,7), new PieceColor(Pieces.PAWN, Colors.WHITE));
+        definePosition(0,1, PieceType.HORSE, ColorType.WHITE);
+        definePosition(0,6, PieceType.HORSE, ColorType.WHITE);
 
-        initialPositionForPieces.put(new Tuple(6,0), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,1), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,2), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,3), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,4), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,5), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,6), new PieceColor(Pieces.PAWN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(6,7), new PieceColor(Pieces.PAWN, Colors.BLACK));
+        definePosition(0,2, PieceType.BISHOP, ColorType.WHITE);
+        definePosition(0,5, PieceType.BISHOP, ColorType.WHITE);
 
-        initialPositionForPieces.put(new Tuple(7,0),  new PieceColor(Pieces.ROOK, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,1), new PieceColor(Pieces.HORSE, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,2), new PieceColor(Pieces.BISHOP, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,3), new PieceColor(Pieces.QUEEN, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,4), new PieceColor(Pieces.KING, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,5), new PieceColor(Pieces.BISHOP, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,6), new PieceColor(Pieces.HORSE, Colors.BLACK));
-        initialPositionForPieces.put(new Tuple(7,7), new PieceColor(Pieces.ROOK, Colors.BLACK));
+        definePosition(0,3, PieceType.QUEEN, ColorType.WHITE);
+        definePosition(0,4, PieceType.KING, ColorType.WHITE);
 
+        definePosition(1, 0, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 1, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 2, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 3, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 4, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 5, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 6, PieceType.PAWN, ColorType.WHITE);
+        definePosition(1, 7, PieceType.PAWN, ColorType.WHITE);
+
+
+
+        definePosition(7,0, PieceType.ROOK, ColorType.BLACK);
+        definePosition(7,7, PieceType.ROOK, ColorType.BLACK);
+
+        definePosition(7,1, PieceType.HORSE, ColorType.BLACK);
+        definePosition(7,6, PieceType.HORSE, ColorType.BLACK);
+
+        definePosition(7,2, PieceType.BISHOP, ColorType.BLACK);
+        definePosition(7,5, PieceType.BISHOP, ColorType.BLACK);
+
+        definePosition(7,3, PieceType.QUEEN,ColorType.BLACK);
+        definePosition(7,4, PieceType.KING, ColorType.BLACK);
+
+        definePosition(6, 0, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 1, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 2, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 3, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 4, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 5, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 6, PieceType.PAWN, ColorType.BLACK);
+        definePosition(6, 7, PieceType.PAWN, ColorType.BLACK);
+    }
+
+    private void definePosition(int row, int column, PieceType pieceType, ColorType color) {
+        initialPositionForPieces.put(new Tuple(row,column), new PieceColor(pieceType, color));
     }
 }

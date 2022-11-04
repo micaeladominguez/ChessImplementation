@@ -15,24 +15,21 @@ public class RabbitRule implements Rule {
 
     @Override
     public RuleResponse isMovePossible(Board board, Position positionTo, Position positionFrom) {
+        if(conditionForRule(board, positionTo, positionFrom)) return new RuleResponse(true, MoveType.SKIP);
+        else return new RuleResponse(false, MoveType.SKIP);
+    }
+
+    private boolean conditionForRule(Board board, Position positionTo, Position positionFrom) {
         int difference = Math.abs(positionTo.getRow() - positionFrom.getRow());
-        if(positionTo.getPiece().isPresent() ||
-           positionFrom.getColumn() != positionTo.getColumn()
-           || difference != limit
-           || !pieceInAllPath(board, positionTo.getRow(), positionFrom.getRow(), positionFrom.getColumn())) return new RuleResponse(false, MoveType.SKIP);
-        else return new RuleResponse(true, MoveType.SKIP);
+        return positionTo.getPiece().isEmpty() ||
+                positionFrom.getColumn() == positionTo.getColumn()
+                || difference == limit
+                || pieceInAllPath(board, positionTo.getRow(), positionFrom.getRow(), positionFrom.getColumn());
     }
 
     private boolean pieceInAllPath(Board board, int rowTo, int rowFrom, int column) {
-        int min = 0;
-        int max = 0;
-        if(rowFrom > rowTo){
-            min = rowTo;
-            max = rowFrom;
-        }else{
-            min = rowFrom;
-            max = rowTo;
-        }
+        int min = Math.min(rowFrom, rowTo);
+        int max = Math.max(rowFrom, rowTo);
         for (int i = min; i < max ; i++) {
             if(board.getBoard()[i][column].isEmpty()) return false;
         }
